@@ -1,16 +1,34 @@
-# React + Vite
+# 🚀 Apollo - Sistema de Chamados & Helpdesk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **"Relate o problema, a Apollo lança a solução."**
 
-Currently, two official plugins are available:
+O **Apollo** é uma plataforma moderna de Helpdesk e gerenciamento de tickets (chamados) desenvolvida para simplificar o suporte técnico. Com uma interface inspirada na estética espacial e painéis de controle da NASA, o sistema simula uma verdadeira central de comando para as suas decolagens de soluções.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📱 Protótipo da Interface
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+<p align="center">
+  <img width="500" alt="Protótipo da Tela de Login do Apollo" src="https://github.com/user-attachments/assets/9453e9d3-73e6-4a74-990b-83b945a158ce" />
+</p>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tecnologias Utilizadas
+
+Este ecossistema de Front-end foi construído utilizando as seguintes tecnologias de ponta:
+
+* **React** — Biblioteca JavaScript para construção de interfaces modulares.
+* **Vite** — Ferramenta de build ultra-rápida para o ambiente de desenvolvimento.
+* **Tailwind CSS** — Framework utilitário para estilização fluida e responsiva.
+* **Google Fonts (Poller One)** — Tipografia personalizada para a identidade visual.
+
+---
+
+## 🛸 Como Iniciar a Decolagem (Executar o Projeto)
+
+Para rodar este painel localmente na sua máquina, siga os passos abaixo:
+
+### 1. Clonar o repositório
+```bash
+git clone [https://github.com/SEU-USUARIO/APOLO-FRONT.git](https://github.com/SEU-USUARIO/APOLO-FRONT.git)

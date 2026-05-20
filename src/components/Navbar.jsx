@@ -1,27 +1,17 @@
 import { useAuth } from '../context/AuthContext'
-import { useNavigate, Link } from 'react-router-dom'
 
 export default function Navbar() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-
-  const handle = () => {
-    logout()
-    navigate('/login')
-  }
+  const { user } = useAuth()
 
   return (
-    <nav className="border-b border-[#1e1e2e] bg-[#111118] px-8 py-4 flex items-center justify-between">
-      <Link to="/" className="text-xl font-bold text-white tracking-tight">Apollo</Link>
-      <div className="flex items-center gap-6">
-        <Link to="/"        className="text-sm text-zinc-400 hover:text-white transition-colors">Dashboard</Link>
-        <Link to="/tickets" className="text-sm text-zinc-400 hover:text-white transition-colors">Tickets</Link>
-        <div className="flex items-center gap-3 ml-4 pl-4 border-l border-[#1e1e2e]">
-          <div>
-            <p className="text-sm text-white font-medium">{user?.username}</p>
-            <p className="text-xs text-zinc-500">{user?.role}</p>
-          </div>
-          <button onClick={handle} className="text-xs text-zinc-500 hover:text-red-400 transition-colors">Sair</button>
+    <nav className="w-full border-b border-[#1e1e2e] bg-[#111118] px-8 py-4 flex items-center justify-end">
+      <div className="flex items-center gap-3">
+        <div>
+          <p className="text-sm text-white font-medium text-right">{user?.username}</p>
+          <p className="text-xs text-zinc-500 text-right">{user?.role}</p>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
+          {user?.username?.[0]?.toUpperCase()}
         </div>
       </div>
     </nav>

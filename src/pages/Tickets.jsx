@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/axios'
+import Layout from '../components/Layout'
 
 const STATUS_COLORS = {
   open:        'bg-indigo-500/10 text-indigo-400',
@@ -26,6 +27,7 @@ export default function Tickets() {
   }, [])
 
   return (
+    <Layout>
     <div className="min-h-screen bg-[#0a0a0f] text-white">
       <nav className="border-b border-[#1e1e2e] px-8 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/')}>Apollo</h1>
@@ -71,5 +73,6 @@ export default function Tickets() {
         </div>
       </main>
     </div>
+    </Layout>
   )
 }

@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import TicketForm from '../components/TicketForm'
+import Layout from '../components/Layout'
 import api from '../api/axios'
 
 export default function Dashboard() {
-  const { user } = useAuth()
-  const navigate = useNavigate()
+  const { user }   = useAuth()
+  const navigate   = useNavigate()
   const [tickets, setTickets]   = useState([])
   const [showForm, setShowForm] = useState(false)
 
@@ -22,7 +23,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <Layout>
       <Navbar />
 
       {showForm && (
@@ -32,7 +33,7 @@ export default function Dashboard() {
         />
       )}
 
-      <main className="px-8 py-10 max-w-6xl mx-auto">
+      <div className="px-8 py-10 text-white max-w-6xl w-full">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-semibold">Olá, {user?.username} 👋</h2>
@@ -40,19 +41,17 @@ export default function Dashboard() {
               {user?.role === 'user' ? 'Acompanhe seus chamados' : 'Painel de atendimento'}
             </p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
-          >
+          <button onClick={() => setShowForm(true)}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
             + Abrir chamado
           </button>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-10">
           {[
-            { label: 'Abertos',       value: counts.open,        color: 'text-indigo-400'  },
-            { label: 'Em andamento',  value: counts.in_progress, color: 'text-amber-400'   },
-            { label: 'Resolvidos',    value: counts.resolved,    color: 'text-emerald-400' },
+            { label: 'Abertos',      value: counts.open,        color: 'text-indigo-400'  },
+            { label: 'Em andamento', value: counts.in_progress, color: 'text-amber-400'   },
+            { label: 'Resolvidos',   value: counts.resolved,    color: 'text-emerald-400' },
           ].map(card => (
             <div key={card.label} className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
               <p className="text-xs text-zinc-500 mb-2">{card.label}</p>
@@ -79,17 +78,12 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {tickets.slice(0, 5).map(t => (
-                <tr key={t.id}
-                  onClick={() => navigate(`/tickets/${t.id}`)}
+                <tr key={t.id} onClick={() => navigate(`/tickets/${t.id}`)}
                   className="border-b border-[#1e1e2e] hover:bg-[#1a1a2e] transition-colors cursor-pointer">
                   <td className="px-6 py-4 text-zinc-500">#{t.id}</td>
                   <td className="px-6 py-4 font-medium">{t.title}</td>
-                  <td className="px-6 py-4">
-                    <StatusBadge status={t.status} />
-                  </td>
-                  <td className="px-6 py-4">
-                    <PriorityBadge priority={t.priority} />
-                  </td>
+                  <td className="px-6 py-4"><StatusBadge status={t.status} /></td>
+                  <td className="px-6 py-4"><PriorityBadge priority={t.priority} /></td>
                 </tr>
               ))}
               {tickets.length === 0 && (
@@ -98,31 +92,25 @@ export default function Dashboard() {
             </tbody>
           </table>
         </div>
-      </main>
-    </div>
+      </div>
+    </Layout>
   )
 }
 
 function StatusBadge({ status }) {
   const map = {
     open:        'bg-indigo-500/10 text-indigo-400',
-    in_progress: 'bg-amber-500/10  text-amber-400',
-    waiting:     'bg-zinc-500/10   text-zinc-400',
+    in_progress: 'bg-amber-500/10 text-amber-400',
+    waiting:     'bg-zinc-500/10  text-zinc-400',
     resolved:    'bg-emerald-500/10 text-emerald-400',
-    closed:      'bg-red-500/10    text-red-400',
+    closed:      'bg-red-500/10   text-red-400',
   }
-  const labels = {
-    open: 'Aberto', in_progress: 'Em andamento',
-    waiting: 'Aguardando', resolved: 'Resolvido', closed: 'Fechado'
-  }
+  const labels = { open: 'Aberto', in_progress: 'Em andamento', waiting: 'Aguardando', resolved: 'Resolvido', closed: 'Fechado' }
   return <span className={`px-2 py-1 rounded-md text-xs font-medium ${map[status]}`}>{labels[status]}</span>
 }
 
 function PriorityBadge({ priority }) {
-  const map = {
-    low: 'text-zinc-400', medium: 'text-blue-400',
-    high: 'text-amber-400', urgent: 'text-red-400'
-  }
+  const map = { low: 'text-zinc-400', medium: 'text-blue-400', high: 'text-amber-400', urgent: 'text-red-400' }
   const labels = { low: 'Baixa', medium: 'Média', high: 'Alta', urgent: 'Urgente' }
   return <span className={`text-xs font-medium ${map[priority]}`}>{labels[priority]}</span>
 }

@@ -5,6 +5,10 @@ import Navbar from '../components/Navbar'
 import TicketForm from '../components/TicketForm'
 import Layout from '../components/Layout'
 import api from '../api/axios'
+import {
+  AreaChart, Area, BarChart, Bar,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from 'recharts'
 
 export default function Dashboard() {
   const { user }   = useAuth()
@@ -16,10 +20,43 @@ export default function Dashboard() {
     api.get('/tickets/').then(r => setTickets(r.data))
   }, [])
 
-  const counts = {
-    open:        tickets.filter(t => t.status === 'open').length,
-    in_progress: tickets.filter(t => t.status === 'in_progress').length,
-    resolved:    tickets.filter(t => t.status === 'resolved').length,
+  // Cards
+  const total    = tickets.length
+  const abertos  = tickets.filter(t => t.status === 'open').length
+  const fechados = tickets.filter(t => ['closed', 'resolved'].includes(t.status)).length
+  const novos    = tickets.filter(t => {
+    const d = new Date(t.created_at)
+    const hoje = new Date()
+    return d.getDate() === hoje.getDate() && d.getMonth() === hoje.getMonth()
+  }).length
+
+  // Gráfico 1 — chamados por mês
+  const porMes = () => {
+    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
+    const contagem = Array(12).fill(0)
+    tickets.forEach(t => {
+      const m = new Date(t.created_at).getMonth()
+      contagem[m]++
+    })
+    return meses.map((m, i) => ({ mes: m, chamados: contagem[i] }))
+  }
+
+  // Gráfico 2 — chamados por atendente
+  const porAtendente = () => {
+    const map = {}
+    tickets.forEach(t => {
+      const nome = t.assigned_to_username || 'Sem atendente'
+      map[nome] = (map[nome] || 0) + 1
+    })
+    return Object.entries(map).map(([nome, total]) => ({ nome, total }))
+  }
+
+  const tooltipStyle = {
+    backgroundColor: '#111118',
+    border: '1px solid #1e1e2e',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '12px',
   }
 
   return (
@@ -33,7 +70,9 @@ export default function Dashboard() {
         />
       )}
 
-      <div className="px-8 py-10 text-white max-w-6xl w-full">
+      <div className="px-8 py-8 text-white w-full">
+
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-semibold">Olá, {user?.username} 👋</h2>
@@ -47,70 +86,80 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-10">
-          {[
-            { label: 'Abertos',      value: counts.open,        color: 'text-indigo-400'  },
-            { label: 'Em andamento', value: counts.in_progress, color: 'text-amber-400'   },
-            { label: 'Resolvidos',   value: counts.resolved,    color: 'text-emerald-400' },
-          ].map(card => (
-            <div key={card.label} className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
-              <p className="text-xs text-zinc-500 mb-2">{card.label}</p>
-              <p className={`text-4xl font-bold ${card.color}`}>{card.value}</p>
-            </div>
-          ))}
-        </div>
+        {/* Layout principal */}
+        <div className="grid grid-cols-4 gap-4">
 
-        <div className="bg-[#111118] border border-[#1e1e2e] rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-[#1e1e2e] flex items-center justify-between">
-            <h3 className="text-sm font-medium">Chamados recentes</h3>
-            <button onClick={() => navigate('/tickets')} className="text-xs text-indigo-400 hover:text-indigo-300">
-              Ver todos →
-            </button>
+          {/* Gráfico área — chamados por mês (ocupa 3 colunas) */}
+          <div className="col-span-3 bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
+            <h3 className="text-sm font-medium mb-1">Chamados por mês</h3>
+            <p className="text-xs text-zinc-500 mb-6">Volume de chamados abertos ao longo do ano</p>
+            <ResponsiveContainer width="100%" height={220}>
+              <AreaChart data={porMes()}>
+                <defs>
+                  <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
+                <XAxis dataKey="mes" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Area type="monotone" dataKey="chamados" stroke="#6366f1" fill="url(#grad)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#1e1e2e] text-zinc-500 text-xs">
-                <th className="text-left px-6 py-3">#</th>
-                <th className="text-left px-6 py-3">Título</th>
-                <th className="text-left px-6 py-3">Status</th>
-                <th className="text-left px-6 py-3">Prioridade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tickets.slice(0, 5).map(t => (
-                <tr key={t.id} onClick={() => navigate(`/tickets/${t.id}`)}
-                  className="border-b border-[#1e1e2e] hover:bg-[#1a1a2e] transition-colors cursor-pointer">
-                  <td className="px-6 py-4 text-zinc-500">#{t.id}</td>
-                  <td className="px-6 py-4 font-medium">{t.title}</td>
-                  <td className="px-6 py-4"><StatusBadge status={t.status} /></td>
-                  <td className="px-6 py-4"><PriorityBadge priority={t.priority} /></td>
-                </tr>
+
+          {/* Painel lateral — análise rápida (1 coluna) */}
+          <div className="col-span-1 bg-[#111118] border border-[#1e1e2e] rounded-xl p-6 flex flex-col gap-4">
+            <h3 className="text-sm font-medium">Análise rápida</h3>
+            <div className="flex flex-col gap-3 flex-1">
+              {[
+                { label: 'Taxa de resolução', value: total ? Math.round((fechados/total)*100) + '%' : '0%', color: 'text-emerald-400' },
+                { label: 'Sem atendente',     value: tickets.filter(t => !t.assigned_to).length, color: 'text-amber-400' },
+                { label: 'Urgentes',          value: tickets.filter(t => t.priority === 'urgent').length, color: 'text-red-400' },
+                { label: 'Aguardando',        value: tickets.filter(t => t.status === 'waiting').length, color: 'text-zinc-400' },
+              ].map(item => (
+                <div key={item.label} className="bg-[#1a1a2e] rounded-lg px-4 py-3 flex items-center justify-between">
+                  <span className="text-xs text-zinc-400">{item.label}</span>
+                  <span className={`text-lg font-bold ${item.color}`}>{item.value}</span>
+                </div>
               ))}
-              {tickets.length === 0 && (
-                <tr><td colSpan={4} className="text-center text-zinc-600 py-10">Nenhum chamado ainda.</td></tr>
-              )}
-            </tbody>
-          </table>
+            </div>
+          </div>
+
+          {/* Gráfico barras — por atendente (ocupa 2 colunas) */}
+          <div className="col-span-2 bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
+            <h3 className="text-sm font-medium mb-1">Chamados por atendente</h3>
+            <p className="text-xs text-zinc-500 mb-6">Distribuição de tickets assumidos</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={porAtendente()}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
+                <XAxis dataKey="nome" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Bar dataKey="total" fill="#8b5cf6" radius={[4,4,0,0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Cards de resumo (2 colunas = 4 cards) */}
+          <div className="col-span-2 grid grid-cols-2 gap-4">
+            {[
+              { label: 'Total de chamados', value: total,    color: 'text-white',         bg: '' },
+              { label: 'Novos hoje',        value: novos,    color: 'text-indigo-400',    bg: '' },
+              { label: 'Em aberto',         value: abertos,  color: 'text-amber-400',     bg: '' },
+              { label: 'Resolvidos',        value: fechados, color: 'text-emerald-400',   bg: '' },
+            ].map(card => (
+              <div key={card.label} className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-6">
+                <p className="text-xs text-zinc-500 mb-2">{card.label}</p>
+                <p className={`text-4xl font-bold ${card.color}`}>{card.value}</p>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </Layout>
   )
-}
-
-function StatusBadge({ status }) {
-  const map = {
-    open:        'bg-indigo-500/10 text-indigo-400',
-    in_progress: 'bg-amber-500/10 text-amber-400',
-    waiting:     'bg-zinc-500/10  text-zinc-400',
-    resolved:    'bg-emerald-500/10 text-emerald-400',
-    closed:      'bg-red-500/10   text-red-400',
-  }
-  const labels = { open: 'Aberto', in_progress: 'Em andamento', waiting: 'Aguardando', resolved: 'Resolvido', closed: 'Fechado' }
-  return <span className={`px-2 py-1 rounded-md text-xs font-medium ${map[status]}`}>{labels[status]}</span>
-}
-
-function PriorityBadge({ priority }) {
-  const map = { low: 'text-zinc-400', medium: 'text-blue-400', high: 'text-amber-400', urgent: 'text-red-400' }
-  const labels = { low: 'Baixa', medium: 'Média', high: 'Alta', urgent: 'Urgente' }
-  return <span className={`text-xs font-medium ${map[priority]}`}>{labels[priority]}</span>
 }

@@ -77,7 +77,7 @@ export default function Dashboard() {
           <div>
             <h2 className="text-2xl font-semibold">Olá, {user?.username} 👋</h2>
             <p className="text-zinc-500 text-sm mt-1">
-              {user?.role === 'user' ? 'Acompanhe seus chamados' : 'Painel de atendimento'}
+              {user?.role === 'user' ? 'Acompanhe seus chamados' : 'Painel de controle'}
             </p>
           </div>
           <button onClick={() => setShowForm(true)}

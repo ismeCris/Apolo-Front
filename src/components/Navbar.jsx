@@ -4,13 +4,27 @@ export default function Navbar() {
   const { user } = useAuth()
 
   return (
-    <nav className="w-full border-b border-[#1e1e2e] bg-[#111118] px-8 py-4 flex items-center justify-end">
-      <div className="flex items-center gap-3">
-        <div>
-          <p className="text-sm text-white font-medium text-right">{user?.username}</p>
-          <p className="text-xs text-zinc-500 text-right">{user?.role}</p>
+    <nav style={{
+      width: '100%',
+      borderBottom: '1px solid #1e1e2e',
+      backgroundColor: '#111118',
+      padding: '14px 32px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      flexShrink: 0,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ textAlign: 'right' }}>
+          <p style={{ fontSize: '14px', color: 'white', fontWeight: 500 }}>{user?.username}</p>
+          <p style={{ fontSize: '12px', color: '#71717a' }}>{user?.role}</p>
         </div>
-        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
+        <div style={{
+          width: '34px', height: '34px', borderRadius: '50%',
+          backgroundColor: '#4f46e5', display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          fontSize: '13px', fontWeight: 700, color: 'white',
+        }}>
           {user?.username?.[0]?.toUpperCase()}
         </div>
       </div>

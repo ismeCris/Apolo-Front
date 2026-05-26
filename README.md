@@ -21,7 +21,6 @@ Este ecossistema de Front-end foi construído utilizando as seguintes tecnologia
 * **React** — Biblioteca JavaScript para construção de interfaces modulares.
 * **Vite** — Ferramenta de build ultra-rápida para o ambiente de desenvolvimento.
 * **Tailwind CSS** — Framework utilitário para estilização fluida e responsiva.
-* **Google Fonts (Poller One)** — Tipografia personalizada para a identidade visual.
 
 ---
 

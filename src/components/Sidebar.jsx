@@ -20,7 +20,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }) {
   return (
     <aside 
       className={`min-h-screen bg-[#111118] border-r border-[#1e1e2e] flex flex-col fixed left-0 top-0 z-40 transition-all duration-300
-        ${isExpanded ? 'w-60' : 'w-20'}`} // Altera a largura dinamicamente com transição suave
+        ${isExpanded ? 'w-50' : 'w-20'}`} 
     >
       {/* Logo + Botão Toggle */}
       <div className="px-5 py-5 border-b border-[#1e1e2e] flex items-center justify-between min-h-[73px]">
@@ -34,7 +34,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }) {
         {/* Botão de Encolher/Abrir */}
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className={`p-1.5 rounded-lg bg-[#1a1a2e] text-zinc-400 hover:text-white transition-colors ${!isExpanded ? 'mx-auto' : ''}`}
+          className={`p-1.5 rounded-lg bg-[#1a1a2e] text-zinc-500 hover:text-white transition-colors ${!isExpanded ? 'mx-auto' : ''}`}
         >
           {isExpanded ? '◀' : '☰'}
         </button>

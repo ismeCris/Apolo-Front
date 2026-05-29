@@ -15,7 +15,7 @@ export default function Layout({ children }) {
       {/* Container da Sidebar dinâmico */}
       <div style={{ 
         flexShrink: 0, 
-        width: isExpanded ? '240px' : '75px', 
+        width: isExpanded ? '230px' : '100px',
         transition: 'width 0.3s ease' /* Transição suave ao abrir/fechar */
       }}>
         {/* Passamos o estado e a função de mudar o estado para dentro da Sidebar */}

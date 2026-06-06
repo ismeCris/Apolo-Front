@@ -8,7 +8,7 @@ export default function Navbar() {
       width: '100%',
       borderBottom: '1px solid #1e1e2e',
       backgroundColor: '#111118',
-      padding: '14px 32px',
+      padding: '14px 35px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
@@ -16,8 +16,8 @@ export default function Navbar() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '14px', color: 'white', fontWeight: 500 }}>{user?.username}</p>
-          <p style={{ fontSize: '12px', color: '#71717a' }}>{user?.role}</p>
+          <p style={{ fontSize: '5px', color: 'white', fontWeight: 500 }}>{user?.username}</p>
+          <p style={{ fontSize: '5px', color: '#71717a' }}>{user?.role}</p>
         </div>
         <div style={{
           width: '34px', height: '34px', borderRadius: '50%',

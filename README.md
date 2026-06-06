@@ -9,9 +9,18 @@ O **Apollo** é uma plataforma moderna de Helpdesk e gerenciamento de tickets (c
 ## 📱 Protótipo da Interface
 
 <p align="center">
-  <img width="500" alt="Protótipo da Tela de Login do Apollo" src="https://github.com/user-attachments/assets/9453e9d3-73e6-4a74-990b-83b945a158ce" />
-</p>
+  <img
+    src="https://github.com/user-attachments/assets/21e93e51-00e1-4491-b50a-c0c6d37846fb"
+    alt="Tela de Login do Apollo"
+    width="450"
+  />
 
+  <img
+    src="https://github.com/user-attachments/assets/83306e8c-01fc-4f4d-9ea5-335c1d4d88fa"
+    alt="Dashboard do Apollo"
+    width="450"
+  />
+</p>
 ---
 
 ## 🛠️ Tecnologias Utilizadas
